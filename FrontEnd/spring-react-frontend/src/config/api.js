@@ -5,12 +5,48 @@ const API_URL =
     ? 'https://employee-management-system-nn.vercel.app/api'
     : 'http://localhost:5000/api';
 
+console.log('API URL:', API_URL);
+
 const api = axios.create({
   baseURL: API_URL,
   headers: {
     'Content-Type': 'application/json',
   },
+  withCredentials: true,
+  timeout: 10000, // 10 second timeout
 });
+
+// Request interceptor
+api.interceptors.request.use(
+  (config) => {
+    console.log('Making request to:', config.url);
+    return config;
+  },
+  (error) => {
+    console.error('Request error:', error);
+    return Promise.reject(error);
+  }
+);
+
+// Response interceptor
+api.interceptors.response.use(
+  (response) => {
+    console.log('Response received:', response.data);
+    return response;
+  },
+  (error) => {
+    if (error.code === 'ERR_NETWORK') {
+      console.error(
+        'Network Error: Please make sure the backend server is running on port 5000'
+      );
+    } else if (error.response) {
+      console.error('API Error Response:', error.response.data);
+    } else {
+      console.error('API Error:', error.message);
+    }
+    return Promise.reject(error);
+  }
+);
 
 export const employeeApi = {
   getAll: () => api.get('/employees'),
