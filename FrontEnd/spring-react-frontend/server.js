@@ -11,7 +11,7 @@ app.use(
   cors({
     origin:
       process.env.NODE_ENV === 'production'
-        ? 'https://employee-management-system-seven-rho.vercel.app'
+        ? 'https://employee-management-system-nn.vercel.app'
         : 'http://localhost:3000',
     methods: ['GET', 'POST', 'PUT', 'DELETE'],
     allowedHeaders: ['Content-Type'],
