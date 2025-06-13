@@ -36,6 +36,20 @@ export default function Home() {
     }
   };
 
+  const createTestEmployee = async () => {
+    try {
+      await employeeApi.create({
+        firstName: 'John',
+        lastName: 'Doe',
+        emailId: 'john.doe@example.com',
+      });
+      loadEmployees();
+    } catch (error) {
+      console.error('Error creating test employee:', error);
+      setError('Failed to create test employee');
+    }
+  };
+
   const deleteEmployee = async (id) => {
     try {
       await employeeApi.delete(id);
@@ -57,6 +71,17 @@ export default function Home() {
         {error && (
           <div className='alert alert-danger' role='alert'>
             {error}
+          </div>
+        )}
+        {!loading && employees.length === 0 && (
+          <div className='alert alert-warning' role='alert'>
+            No employees found.
+            <button
+              className='btn btn-primary ms-3'
+              onClick={createTestEmployee}
+            >
+              Create Test Employee
+            </button>
           </div>
         )}
         <table className='table border shadow'>
